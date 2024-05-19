@@ -1,0 +1,13 @@
+{
+    "name": "vendor/lib",
+    "description": "dependency",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/"
+        }
+    },
+    "require": {
+        "firebase/php-jwt": "^6.10"
+    }
+}
