@@ -16,6 +16,7 @@
         private $phone;
         private $address;
         private $id;
+        private $AccessToken;
         public function __construct() {
             
             parent::__construct();
