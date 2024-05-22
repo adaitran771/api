@@ -225,6 +225,9 @@
                 return false;
             }
         }
+        public function Login() {
+            echo "Login";
+        }
     }
     
 ?>

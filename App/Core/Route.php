@@ -14,18 +14,18 @@ class Route{
     
     public function doRouting(){
         $reqUrl = $_SERVER['REQUEST_URI'];
+        
         $reqMet = $_SERVER['REQUEST_METHOD'];
+
         foreach($this->routes as  $route) {
     
-            // convert urls like '/users/:uid/posts/:pid' to regular expression      
-            $pattern = "@^" . preg_replace('/\\\:[a-zA-Z0-9\_\-]+/', '([a-zA-Z0-9\-\_]+)', preg_quote($route['url'])) . "$@D";
+            // convert urls like '/controller/action' to regular expression   
+            $pattern = "^/[a-zA-Z]*/[a-zA-Z]*$";
             $matches = array();
     
-            if($reqMet == $route['method'] && preg_match($pattern, $reqUrl, $matches)) {
-    
-                // remove the first match
-                array_shift($matches);
-                // call the callback with the matched positions as params
+            if($reqMet == $route['method'] && $reqUrl == $route['url']) {
+                
+                
                 return call_user_func_array($route['callback'], $matches);
             }
         }
