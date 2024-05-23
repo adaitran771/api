@@ -19,8 +19,7 @@ class Route{
 
         foreach($this->routes as  $route) {
     
-            // convert urls like '/controller/action' to regular expression   
-            $pattern = "^/[a-zA-Z]*/[a-zA-Z]*$";
+           
             $matches = array();
     
             if($reqMet == $route['method'] && $reqUrl == $route['url']) {

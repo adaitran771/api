@@ -101,7 +101,7 @@
                 // Use password_verify to check if the entered password matches the stored hash
                 if(password_verify($this->password, $stored_hash)) {
                     // Passwords match, authentication successful
-                    return true;
+                    return $user;
                 } else {
                     // Passwords don't match, authentication failed
                     return false;
@@ -165,7 +165,7 @@
     
         public function addUser() {
             try {
-                $sql = 'INSERT INTO account (username, email, password, name, phone, address) VALUES (:username, :email, :password, :name, :phone, :address)';
+                $sql = 'INSERT INTO account (username, email, password, name, phone, address, AccessToken) VALUES (:username, :email, :password, :name, :phone, :address, :AccessToken)';
                 $stmt = $this->connect->prepare($sql);
         
                 $password_hash = password_hash($this->password, PASSWORD_DEFAULT);
@@ -177,6 +177,7 @@
                 $stmt->bindParam(':name', $this->name, PDO::PARAM_STR);
                 $stmt->bindParam(':phone', $this->phone, PDO::PARAM_STR);
                 $stmt->bindParam(':address', $this->address, PDO::PARAM_STR);
+                $stmt->bindParam(':AccessToken', $this->AccessToken, PDO::PARAM_STR);
         
                 // Thực thi câu lệnh
                 $success = $stmt->execute();
@@ -225,9 +226,7 @@
                 return false;
             }
         }
-        public function Login() {
-            echo "Login";
-        }
+        
     }
     
 ?>
