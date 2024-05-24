@@ -23,9 +23,10 @@ class Route{
             $matches = array();
     
             if($reqMet == $route['method'] && $reqUrl == $route['url']) {
+                $controller = new $route['callback'][0]();
+                $method = $route['callback'][1];
                 
-                
-                return call_user_func_array($route['callback'], $matches);
+                return call_user_func_array([$controller, $method], $matches);
             }
         }
     }

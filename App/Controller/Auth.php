@@ -1,17 +1,14 @@
 <?php
 namespace App\Controller;
 use Firebase\JWT\JWT;
-use App\Model;
-class Auth {
+use App\Model\User;
+class Auth extends Rest {
     public function Login(){
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $data = json_decode(file_get_contents('php://input'), true);
-            $username = $data['username'];
-            $password = $data['password'];
+      
 
-            $user = new Model\User();
-            $user->setUsername($username);
-            $user->setPassword($password);
+            $user = new User();
+            $user->setUsername($this->request['username']);
+            $user->setPassword($this->request['password']);
             $user = $user->authenticate();
             if($user) {
                 $id_user = $user->getId();
@@ -20,13 +17,13 @@ class Auth {
                     "id" => $id_user
                 );
                 $jwt = JWT::encode($payload, $key, 'HS256');
-                echo json_encode(array("message" => "Successful login.", "jwt" => $jwt));
+                $this->response(['jwt' => $jwt]);
             } else {
-                echo json_encode(array("message" => "Login failed."));
+                $this->response(['message' => 'Invalid username or password'], INVALID_USER_PASS);
             }
 
             
-        }
+        
     }
     public function Logout(){
         echo "Logout";

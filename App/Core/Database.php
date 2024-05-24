@@ -2,6 +2,7 @@
 namespace App\Core;
 use PDO;
 use PDOException;
+require('config.php');
 class Database {
     public $connect;
 
