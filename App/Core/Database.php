@@ -2,7 +2,7 @@
 namespace App\Core;
 use PDO;
 use PDOException;
-require('config.php');
+require_once(__DIR__.'/config.php');
 class Database {
     public $connect;
 

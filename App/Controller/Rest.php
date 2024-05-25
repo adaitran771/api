@@ -8,6 +8,7 @@ class Rest {
 
      function __construct() {
         $this->getRequest();
+        $this->getBearerToken();
     }
     private function getRequest() {
         $data = json_decode(file_get_contents('php://input'), true);
@@ -17,6 +18,7 @@ class Rest {
     }
     private function validateRequest() {
         $header = apache_request_headers();
+        
         
        
         if($header['Content-Type'] !== 'application/json') {
@@ -29,6 +31,7 @@ class Rest {
         header("Content-Type: application/json");
         
         echo json_encode(['respone' => ['status' => $status, 'data' => $data]]);
+        exit;
     }
 
     private function getAuthorizationHeader(){

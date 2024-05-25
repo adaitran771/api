@@ -86,6 +86,28 @@
         public function setId($id) {
             $this->id = $id;
         }
+        public function getAccessToken() {
+            return $this->AccessToken;
+        }
+        public function setAccessToken($AccessToken) {
+            $this->AccessToken = $AccessToken;
+        }
+        // update access token user
+        public function updateAccessToken() {
+            try {
+                // Prepare SQL statement to update user information
+                $sql = 'UPDATE account SET AccessToken = :AccessToken WHERE id = :userId';
+                $stmt = $this->connect->prepare($sql);
+                $stmt->bindValue(':AccessToken', $this->AccessToken, PDO::PARAM_STR);
+                $stmt->bindValue(':userId', $this->id, PDO::PARAM_INT);
+                return $stmt->execute();
+            } catch (PDOException $e) {
+                // Log the error or throw an exception for better error handling
+                $e->getMessage();
+
+                return false;
+            }
+        }
         /** kiểm tra thông tin user có đầy đủ không */
         public function checkUser() {
            return  $this->username && $this->email && $this->name && $this->address && $this->phone;
@@ -97,7 +119,7 @@
     
             if(!empty($user)) {
                 // Retrieve the stored password hash from the user data
-                $stored_hash = $user['password'];
+                $stored_hash = $user->getPassword();
                 // Use password_verify to check if the entered password matches the stored hash
                 if(password_verify($this->password, $stored_hash)) {
                     // Passwords match, authentication successful
@@ -126,7 +148,7 @@
           *chế độ trả về class nếu tham số là true ,
          *không thì trả về array_assoc
           */
-        public function getUserByUserName($fetchModeClass = false) {
+        public function getUserByUserName($fetchModeClass = true) {
             $sql = "SELECT * FROM account WHERE username=:username ";
             $stmt = $this->connect->prepare($sql);
             $stmt->bindValue(':username', $this->username, PDO::PARAM_STR);

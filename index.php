@@ -5,7 +5,7 @@ require_once('./vendor/autoload.php');
 
 $router = new Route();
 $router->addRoute('POST', "/api/users/login",['App\Controller\Auth','Login']);
-$router->addRoute('GET', "/api/users/logout",['App\Model\User','Logout']);
+$router->addRoute('POST', "/api/users/logout",['App\Controller\Auth','Logout']);
 
 $router->doRouting();
 
