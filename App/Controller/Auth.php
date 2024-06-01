@@ -5,6 +5,9 @@ use Firebase\JWT\Key;
 use App\Model\User;
 use Exception;
 class Auth extends Rest {
+    public function __construct() {
+        parent::__construct();
+    }
     public function Login(){
       try {
         
@@ -13,6 +16,9 @@ class Auth extends Rest {
         }
 
         $user = new User();
+
+       
+
         $user->setUsername($this->request['username']);
         $user->setPassword($this->request['password']);
         $user = $user->authenticate();

@@ -4,7 +4,8 @@ define("DB_NAME","ct07n_nhom1");
 define("DB_USER","root");
 define("DB_PASS","mysql");
 define('SECRET', '111111');
-
+//paging
+define('LIMIT', 5);
 // 
 /*Error Codes*/
 define('REQUEST_METHOD_NOT_VALID',		        100);

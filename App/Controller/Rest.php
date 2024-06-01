@@ -1,12 +1,16 @@
 <?php
 namespace App\Controller;
 use Firebase\JWT\JWT;
+use \Exception;
 require_once(__DIR__. "/../Core/config.php");
+require_once(__DIR__. "/../../writeLog.php");
 class Rest {
     protected $request;
     protected $jwt;
+    protected $LogFunc;
 
      function __construct() {
+        $this->LogFunc = new \Log;
         $this->getRequest();
         $this->getBearerToken();
     }
@@ -18,19 +22,24 @@ class Rest {
     }
     private function validateRequest() {
         $header = apache_request_headers();
-        
+        if(!isset($header['Content-Type'])) {
+            $this->response(['message' => 'Content type is not set'], REQUEST_CONTENTTYPE_NOT_VALID);
+            
+        }
         
        
-        if($header['Content-Type'] !== 'application/json') {
+        if(strpos($header['Content-Type'] ,'application/json')) {
             $this->response(['message' => 'Invalid content type'], REQUEST_CONTENTTYPE_NOT_VALID);
-            exit;
+            
         }
         
     }
     protected function response($data, $status = 200) {
-        header("Content-Type: application/json");
-        
-        echo json_encode(['respone' => ['status' => $status, 'data' => $data]]);
+        header("Content-Type: application/json; Charset=UTF-8");
+        $rawResponse = ['response' => ['status' => $status, 'data' => $data]];
+        $logJson = json_encode($rawResponse);
+        $this->LogFunc->writeLogRes($logJson);
+        echo json_encode($rawResponse);
         exit;
     }
 
@@ -57,6 +66,7 @@ class Rest {
      * get access token from header
      * */
     protected function getBearerToken() {
+        try {
         $headers = $this->getAuthorizationHeader();
         // HEADER: Get the access token from the header
         if (!empty($headers)) {
@@ -64,7 +74,9 @@ class Rest {
                 $this->jwt = $matches[1];
             }
         }
-        
+    } catch (Exception $e) {
+        $this->response($e->getMessage(), 500);
+    }
     }
 
 }
