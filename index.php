@@ -6,6 +6,7 @@ require_once('writeLog.php');
 $Log = new Log();
 $Log->writeLogReq();
 $router = new Route();
+$router->addRoute('POST', "/api/users/update",['App\Controller\Auth','update']);
 $router->addRoute('GET', "/api/users?username={:username}", ['App\Controller\Auth', 'getUserByUsername']);
 $router->addRoute('POST', "/api/users/login",['App\Controller\Auth','login']);
 $router->addRoute('POST', "/api/users/register",['App\Controller\Auth','register']);

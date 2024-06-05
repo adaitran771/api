@@ -146,5 +146,40 @@ class Auth extends Rest {
             $this->response(['message' => 'Internal server error'], 500);
         }
     }
+
+    public function update() {
+        try {
+        
+            // Kiểm tra xem tất cả các trường cần thiết có được gửi đi không
+            $requiredFields = ['email', 'name', 'phone', 'address','username'];
+            foreach ($requiredFields as $field) {
+                if (!isset($this->request[$field])) {
+                    $this->response(['message' => "$field is required"], 400);
+                    return;
+                }
+            }
+
+            
+
+            // Tạo đối tượng User và đặt các giá trị từ request
+            $user = new User();
+            $user->setUsername($this->request['username']);
+            $user->setEmail($this->request['email']);
+            $user->setName($this->request['name']);
+            $user->setPhone($this->request['phone']);
+            $user->setAddress($this->request['address']);
+
+            // Cập nhật thông tin người dùng trong cơ sở dữ liệu
+            $updated = $user->updateUser();
+
+            if ($updated) {
+                $this->response(['message' => 'User updated successfully']);
+            } else {
+                $this->response(['message' => 'Failed to update user'], 500);
+            }
+        } catch (Exception $e) {
+            $this->response(['message' => $e->getMessage()], 500);
+        }
+    }
 }
 ?>
