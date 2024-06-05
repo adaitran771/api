@@ -124,5 +124,27 @@ class Auth extends Rest {
             $this->response(['message' => $e->getMessage()], 500);
         }
     }
+
+    public function getUserByUsername() {
+        try {
+            if (!isset($this->request['username'])) {
+                $this->response(['message' => 'Username is required and must be a valid string'], 400);
+                return;
+            }
+
+            $user = new User();
+            $user->setUsername($this->request['username']);
+            $userInfo = $user->getInfoByID(false);
+
+            if ($userInfo) {
+                $this->response($userInfo);
+            } else {
+                $this->response(['message' => 'User not found'], 404);
+            }
+        } catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/path/to/error.log');
+            $this->response(['message' => 'Internal server error'], 500);
+        }
+    }
 }
 ?>

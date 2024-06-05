@@ -165,6 +165,17 @@
                 return null;
             }
         }
+
+        public function getInfoByID($fetchModeClass = true) {
+            $sql = "SELECT username,email,password,name,phone,address FROM account WHERE username = :username";
+            $stmt = $this->connect->prepare($sql);
+    
+            // Bind username parameter using PDO for security and efficiency
+            $stmt->bindValue(':username', $this->username, PDO::PARAM_STR);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
         /**trả về đối tượng hoặc mảng user trùng với email ,
          *chế độ trả về class nếu tham số là true ,
          *không thì trả về array_assoc
@@ -252,3 +263,5 @@
     }
     
 ?>
+
+
