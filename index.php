@@ -18,6 +18,8 @@ $router->addRoute('POST', "/api/order",['App\Controller\OrderService','createOrd
 $router->addRoute('POST', "/api/order/user",['App\Controller\OrderService','getOrderByStatus']);
 $router->addRoute('POST', "/api/order/user/update",['App\Controller\OrderService','cancelOrder']);
 
+$router->addRoute('POST', "/api/products/rangePrice",['App\Controller\ProductService','getRangePrice']);
+
 
 $router->doRouting();
 
