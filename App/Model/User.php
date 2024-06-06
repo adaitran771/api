@@ -165,6 +165,17 @@
                 return null;
             }
         }
+
+        public function getInfoByID($fetchModeClass = true) {
+            $sql = "SELECT username,email,password,name,phone,address FROM account WHERE username = :username";
+            $stmt = $this->connect->prepare($sql);
+    
+            // Bind username parameter using PDO for security and efficiency
+            $stmt->bindValue(':username', $this->username, PDO::PARAM_STR);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
         /**trả về đối tượng hoặc mảng user trùng với email ,
          *chế độ trả về class nếu tham số là true ,
          *không thì trả về array_assoc
@@ -248,7 +259,25 @@
                 return false;
             }
         }
+
+        public function updateUser() {
+            try {
+                $sql = "UPDATE account SET email = :email, name = :name, phone = :phone, address = :address WHERE username = :username";
+                $stmt = $this->connect->prepare($sql);
+                $stmt->bindParam(':email', $this->email);
+                $stmt->bindParam(':name', $this->name);
+                $stmt->bindParam(':phone', $this->phone);
+                $stmt->bindParam(':address', $this->address);
+                $stmt->bindParam(':username', $this->username);
+                return $stmt->execute();
+            } catch (PDOException $e) {
+                error_log($e->getMessage(), 3, '/path/to/error.log');
+                return false;
+            }
+        }
         
     }
     
 ?>
+
+
