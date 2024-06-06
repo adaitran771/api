@@ -33,6 +33,8 @@ class Auth extends Rest {
             $jwt = JWT::encode($payload, $key, 'HS256');
             $user->setAccessToken($jwt);
             $user->updateAccessToken();
+            //chuyển đối tượng user thành json
+            $user = json_decode(json_encode($user), true);
             $this->response(['jwt' => $jwt]);
         } else {
             $this->response(['message' => 'Invalid username or password'], INVALID_USER_PASS);

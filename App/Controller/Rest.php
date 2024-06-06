@@ -35,7 +35,7 @@ class Rest {
         
     }
     protected function response($data, $status = 200) {
-        header("Content-Type: application/json; Charset=UTF-8");
+        header("Content-Type: application/json");
         $rawResponse = ['response' => ['status' => $status, 'data' => $data]];
         $logJson = json_encode($rawResponse);
         $this->LogFunc->writeLogRes($logJson);

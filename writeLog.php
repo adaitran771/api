@@ -60,7 +60,7 @@ class Log {
     public function writeLogRes($Res) {
         $file = fopen("client_ips.txt", "a");
         if($file) {
-            $log_entry = "Response: ".json_encode($Res).PHP_EOL;
+            $log_entry = "Response: ".$Res.PHP_EOL;
             fwrite($file, $log_entry);
             fclose($file);
         }
