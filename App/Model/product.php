@@ -109,6 +109,15 @@ class product extends Database{
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function getRangePrice(float $start, float $end)
+    {
+        $sql = "SELECT * FROM product WHERE price BETWEEN :Start and :End";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->bindParam(':Start', $start);
+        $stmt->bindParam(':End', $end);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 }
 ?>

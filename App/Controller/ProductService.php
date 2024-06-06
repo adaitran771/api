@@ -35,5 +35,15 @@ class ProductService extends Rest{
         $data = $this->product->searchByName($name);
         $this->response($data);
     }
+    public function getRangePrice() {
+        $start = $this->request['start'];
+        $end = $this->request['end'];
+        $data = $this->product->getRangePrice($start, $end);
+        if($data) {
+            $this->response($data);
+        } else {
+            $this->response(['message' => 'No product found'], 404);
+        }
+    }
 }
 ?>

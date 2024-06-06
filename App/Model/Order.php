@@ -1,13 +1,15 @@
 <?php
 namespace App\Model;
 use App\Core\Database;
+use PDO;
+use Exception;
+
 class Order extends Database {
     private $id;
     private $id_account;
     private $productName;
     private $quantity;
     private $price;
-    private $total;
     private $size;
     private $color;
     private $idProduct;
@@ -44,12 +46,6 @@ class Order extends Database {
     public function setPrice($price) {
         $this->price = $price;
     }
-    public function getTotal() {
-        return $this->total;
-    }
-    public function setTotal($total) {
-        $this->total = $total;
-    }
     public function getSize() {
         return $this->size;
     }
@@ -77,13 +73,14 @@ class Order extends Database {
     
 
     public function createOrder() {
-        $sql = "INSERT INTO orders (productName, id_account, idProduct, quantity, price, total, size, color, status) VALUES (:productName, :id_account, :idProduct, :quantity, :price, :total, :size, :color, :status)";
+        
+        $sql = "INSERT INTO order_detail (productName, id_account, idProduct, quantity, price, size, color, status) VALUES (:productName, :id_account, :idProduct, :quantity, :price, :size, :color, :status)";
         $stmt = $this->connect->prepare($sql);
         $stmt->bindParam(':id_account', $this->id_account);
         $stmt->bindParam(':idProduct', $this->idProduct);
         $stmt->bindParam(':quantity', $this->quantity);
         $stmt->bindParam(':price', $this->price);
-        $stmt->bindParam(':total', $this->total);
+
         $stmt->bindParam(':size', $this->size);
         $stmt->bindParam(':color', $this->color);
         $stmt->bindParam(':status', $this->status);
@@ -93,20 +90,26 @@ class Order extends Database {
     }
 
     public function updateOrderStatus() {
-        $sql = "UPDATE orders SET status = :status WHERE id = :id";
-        $stmt = $this->connect->prepare($sql);
-        $stmt->bindParam(':status', $this->status);
-        $stmt->bindParam(':id', $this->id);
-        return $stmt->execute();
+        try {
+            $sql = "UPDATE order_detail SET status = :status WHERE id = :id";
+            $stmt = $this->connect->prepare($sql);
+            $stmt->bindParam(':status', $this->status);
+            $stmt->bindParam(':id', $this->id);
+            return $stmt->execute(); 
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
     public function getOrderByStatus () {
-        $sql = "SELECT * FROM orders WHERE status = :status and id_account = :id_account";
+        $sql = "SELECT order_detail.*, product.img FROM order_detail INNER JOIN product On order_detail.idProduct = product.id
+                WHERE order_detail.status = :status and order_detail.id_account = :id_account ";
         $stmt = $this->connect->prepare($sql);
         $stmt->bindParam(':status', $this->status);
         $stmt->bindParam(':id_account', $this->id_account);
         $stmt->execute();
-        return $stmt->fetchAll();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
 
 }
